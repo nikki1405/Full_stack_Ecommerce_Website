@@ -82,7 +82,7 @@ npm start
 - ✅ Admin Dashboard
 
 ## 🤝 Contributors
-- **[Your Name]** - Developer
+- Nikhil - Developer
 
 ## 📜 License
 This project is open-source and available under the **MIT License**.
