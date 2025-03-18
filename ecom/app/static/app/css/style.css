@@ -1,0 +1,138 @@
+.nav-link:hover {
+    color: white; /* Optional: to change the text color to white */
+    transform: scale(1.1); /* Increase the size by 10% */
+}
+
+.dropdown-item:hover {
+    background-color: rgb(2, 2, 8);
+    color: white; /* Optional: to change the text color to white */
+}
+
+.goodnesssec {
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Linear gradient background */
+    height: 250px; /* Adjusted height for equal size */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px; /* Apply border radius */
+    position: relative; /* Ensure positioning for button */
+}
+
+.goodnesssec img {
+    max-width: 100%;
+    max-height: 150px; /* Ensure the image fits within the box */
+    height: auto;
+    border-radius: 10px; /* Apply border radius to images */
+}
+
+.mlkpro {
+    margin-top: 10px;
+    font-size: 16px; /* Adjusted font size */
+    font-weight: bold;
+    background-color: rgb(120, 221, 120);
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px; /* Adjusted padding */
+    position: absolute;
+    bottom: 10px; /* Position the button at the bottom */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.col-md-4, .col-sm-4 {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 30px; /* Add margin to create space between boxes */
+}
+
+.row-gradient {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Linear gradient background for row */
+    color: white; /* Ensure text is visible against the gradient background */
+    border-radius: 10px; /* Apply border radius */
+}
+
+.product-detail {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Linear gradient background for product detail */
+    border-radius: 10px; /* Apply border radius */
+    padding: 20px; /* Add padding */
+    color: white; /* Ensure text is visible against the gradient background */
+    overflow: hidden; /* Ensure content is not cut off */
+}
+
+.about-section {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Linear gradient background for about section */
+    border-radius: 10px; /* Apply border radius */
+    padding: 20px; /* Add padding */
+    color: white; /* Ensure text is visible against the gradient background */
+    margin-bottom: 10px;
+}
+
+.contact-card {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Linear gradient background for contact card */
+    color: rgb(246, 239, 239);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-gradient {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Linear gradient background for form */
+    border-radius: 10px; /* Apply border radius */
+    color: white; /* Ensure text is visible against the gradient background */
+}
+
+.form-gradient a {
+    color: white; /* Change link color to white */
+}
+
+.form-gradient a:hover {
+    color: #ddd; /* Optional: change link color on hover */
+}
+
+.profile-info {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Linear gradient background for profile info */
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.col-sm-6.offset-sm-3 {
+    margin-top: 20px; /* Add margin to the top */
+    padding: 20px; /* Add padding */
+}
+
+.quantity-group .input-group {
+    max-width: 130px;
+}
+
+.quantity-group .form-control {
+    text-align: center;
+    border: 1px solid #dee2e6;
+    background-color: white;
+}
+
+.quantity-group .btn {
+    border: 1px solid #dee2e6;
+    background-color: white;
+    color: #212529;
+}
+
+.quantity-group .btn:hover {
+    background-color: #e9ecef;
+}
+
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

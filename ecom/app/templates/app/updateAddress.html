@@ -1,0 +1,111 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Update Address{% endblock title %}
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-sm-12 mt-5 text-center">
+            <h3>Welcome <span class="text-capitalize text-dark">{{ request.user }}</span></h3>
+        </div>
+        <div class="col-sm-8 offset-sm-2">
+            <div class="form-container p-4">
+                <form action="" method="post" novalidate>
+                    {% csrf_token %}
+                    {% for fm in form %}
+                    <div class="form-group mb-3">
+                        {{ fm.label_tag }}
+                        {{ fm }}
+                        {% if fm.errors %}
+                        <small class="text-warning">{{ fm.errors|striptags }}</small>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="col-12 mt-4 text-center">
+                        <button type="submit" class="btn btn-light px-4 me-2">Update</button>
+                        <a href="{% url 'address' %}" class="btn btn-outline-light px-4">Back</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-container {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(106, 17, 203, 0.2);
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.15) !important;
+        border-color: rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.15) !important;
+    }
+
+    select.form-control {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        padding-right: 2.5rem;
+    }
+
+    label {
+        color: white !important;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-control option {
+        background-color: #6a11cb;
+        color: white;
+    }
+
+    .btn-light {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-light:hover {
+        background: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-warning {
+        color: #ffd700 !important;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+</style>
+{% endblock content %}

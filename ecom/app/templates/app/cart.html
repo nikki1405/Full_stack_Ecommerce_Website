@@ -1,0 +1,290 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}Cart{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        {% if cart %}
+        <h1 class="text-center mb-5">Shopping Cart</h1>
+        <div class="col-sm-8">
+            {% for cart_item in cart %}
+            <div class="card mb-3 product-card">
+                <div class="row g-0">
+                    <div class="col-md-4 image-container">
+                        <img src="{{ cart_item.product.Product_image.url }}" class="img-fluid"
+                            alt="{{ cart_item.product.title }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cart_item.product.title }}</h5>
+                            <p class="card-text">₹{{ cart_item.product.discounted_price }}</p>
+                            <div class="quantity-group d-flex align-items-center">
+                                <span class="me-3">Quantity:</span>
+                                <div class="input-group" style="width: 130px;">
+                                    <button class="btn btn-outline-secondary decrease-qty" type="button"
+                                        data-item="{{ cart_item.id }}">-</button>
+                                    <input type="number" class="form-control text-center quantity-input"
+                                        value="{{ cart_item.quantity }}" min="1" readonly>
+                                    <button class="btn btn-outline-secondary increase-qty" type="button"
+                                        data-item="{{ cart_item.id }}">+</button>
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Total: ₹{{ cart_item.total_price }}
+                                </small>
+                            </p>
+                            <form action="{% url 'remove-from-cart' %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="prod_id" value="{{ cart_item.product.id }}">
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-sm-4">
+            <div class="card summary-card">
+                <div class="card-body">
+                    <h3>Order Summary</h3>
+                    <hr>
+                    <p>Items: {{ total_items }}</p>
+                    <p>Amount: ₹{{ amount }}</p>
+                    <p>Shipping: ₹{{ shipping_amount }}</p>
+                    <hr>
+                    <p class="fw-bold">Total: ₹{{ total_amount }}</p>
+                    <a href="{% url 'checkout' %}" class="btn btn-light w-100">
+                        Place Order
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-cart-container">
+            <div class="empty-cart-box">
+                <i class="fas fa-shopping-cart mb-4" style="font-size: 4rem;"></i>
+                <h1 class="mb-4">Your Cart is Empty</h1>
+                <a href="{% url 'home' %}" class="btn btn-light btn-lg">Continue Shopping</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .container {
+        padding: 30px;
+    }
+
+    .product-card {
+        background: white;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .image-container {
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .img-fluid {
+        max-height: 200px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .summary-card {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 20px;
+    }
+
+    .summary-card hr {
+        border-color: rgba(255, 255, 255, 0.2);
+        margin: 15px 0;
+    }
+
+    .summary-card .btn-light {
+        font-weight: bold;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+    }
+
+    .summary-card .btn-light:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .quantity-group {
+        margin: 15px 0;
+    }
+
+    .empty-cart {
+        padding: 50px 0;
+    }
+
+    .btn-danger {
+        transition: all 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .empty-cart-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 2rem;
+    }
+
+    .empty-cart-box {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        padding: 3rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        color: white;
+        max-width: 500px;
+        width: 90%;
+        transition: transform 0.3s ease;
+    }
+
+    .empty-cart-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .empty-cart-box h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+
+    .empty-cart-box .btn-light {
+        font-weight: 600;
+        padding: 0.8rem 2rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .empty-cart-box .btn-light:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #ffffff;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+        .empty-cart-box {
+            padding: 2rem;
+        }
+
+        .empty-cart-box h1 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const formatCurrency = (amount) => `₹${parseFloat(amount).toFixed(2)}`;
+
+        const updateOrderSummary = (data) => {
+            // Update items count
+            document.querySelector('.summary-card p:nth-of-type(1)').textContent =
+                `Items: ${data.total_items}`;
+
+            // Update amount
+            document.querySelector('.summary-card p:nth-of-type(2)').textContent =
+                `Amount: ${formatCurrency(data.amount)}`;
+
+            // Update shipping
+            document.querySelector('.summary-card p:nth-of-type(3)').textContent =
+                `Shipping: ${formatCurrency(data.shipping_amount)}`;
+
+            // Update total amount
+            document.querySelector('.summary-card .fw-bold').textContent =
+                `Total: ${formatCurrency(data.total_amount)}`;
+        };
+
+        const updateQuantity = async (itemId, action) => {
+            try {
+                const response = await fetch('/update-cart-quantity/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    },
+                    body: JSON.stringify({
+                        item_id: itemId,
+                        action: action
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        // Update quantity input
+                        const quantityInput = document.querySelector(`[data-item="${itemId}"]`)
+                            .closest('.input-group')
+                            .querySelector('.quantity-input');
+                        quantityInput.value = data.quantity;
+
+                        // Update item total
+                        const totalElement = document.querySelector(`[data-item="${itemId}"]`)
+                            .closest('.card-body')
+                            .querySelector('.text-muted');
+                        totalElement.textContent = `Total: ${formatCurrency(data.item_total)}`;
+
+                        // Update order summary
+                        updateOrderSummary(data);
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        // Increase quantity
+        document.querySelectorAll('.increase-qty').forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.getAttribute('data-item');
+                updateQuantity(itemId, 'increase');
+            });
+        });
+
+        // Decrease quantity
+        document.querySelectorAll('.decrease-qty').forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.getAttribute('data-item');
+                updateQuantity(itemId, 'decrease');
+            });
+        });
+    });
+</script>
+{% endblock content %}

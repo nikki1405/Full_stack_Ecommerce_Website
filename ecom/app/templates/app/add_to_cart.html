@@ -1,0 +1,279 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}Shopping Cart{% endblock title %}
+
+{% block main-content %}
+<div class="container-fluid cart-container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="cart-header text-center">
+                <h1><i class="fas fa-shopping-cart"></i> Your Shopping Cart</h1>
+            </div>
+
+            {% if cart_items %}
+            <div class="row mt-4">
+                <div class="col-lg-8">
+                    <div class="cart-items-container">
+                        {% for item in cart_items %}
+                        <div class="cart-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <div class="product-image">
+                                        <img src="{{ item.product.Product_image.url }}" alt="{{ item.product.title }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="product-details">
+                                        <h4>{{ item.product.title }}</h4>
+                                        <p class="text-muted">{{ item.product.description|truncatechars:100 }}</p>
+                                        <div class="price">
+                                            <span class="current-price">₹{{ item.product.discounted_price }}</span>
+                                            {% if item.product.selling_price != item.product.discounted_price %}
+                                            <span class="original-price">₹{{ item.product.selling_price }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="quantity-controls">
+                                        <button class="minus-cart btn" pid="{{ item.product.id }}">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <span class="quantity">{{ item.quantity }}</span>
+                                        <button class="plus-cart btn" pid="{{ item.product.id }}">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <button class="remove-cart btn" pid="{{ item.product.id }}">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div class="summary-details">
+                            <div class="summary-item">
+                                <span>Items ({{ total_items }})</span>
+                                <span>₹{{ subtotal }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Delivery</span>
+                                <span class="text-success">Free</span>
+                            </div>
+                            <div class="summary-total">
+                                <span>Total Amount</span>
+                                <span>₹{{ total_amount }}</span>
+                            </div>
+                            <button class="""checkout-btn" onclick="" location.href='{% url "checkout" %}'">
+                                Proceed to Checkout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class=" empty-cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                <h2>Your cart is empty</h2>
+                                <p>Add items to start shopping!</p>
+                                <a href="{% url 'home' %}" class="continue-shopping">Continue Shopping</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endblock main-content %}
+
+            {% block css %}
+            <style>
+                .cart-container {
+                    background: #f8f9fa;
+                    padding: 2rem 0;
+                }
+
+                .cart-header h1 {
+                    color: #2c3e50;
+                    font-weight: 600;
+                    margin-bottom: 2rem;
+                }
+
+                .cart-header i {
+                    margin-right: 10px;
+                    color: #3498db;
+                }
+
+                .cart-item {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 1.5rem;
+                    margin-bottom: 1.5rem;
+                    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+                    transition: transform 0.2s;
+                }
+
+                .cart-item:hover {
+                    transform: translateY(-5px);
+                }
+
+                .product-image img {
+                    width: 100%;
+                    border-radius: 10px;
+                    object-fit: cover;
+                }
+
+                .product-details h4 {
+                    color: #2c3e50;
+                    margin-bottom: 0.5rem;
+                }
+
+                .price {
+                    margin: 1rem 0;
+                }
+
+                .current-price {
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    color: #2ecc71;
+                }
+
+                .original-price {
+                    text-decoration: line-through;
+                    color: #95a5a6;
+                    margin-left: 10px;
+                }
+
+                .quantity-controls {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 1rem;
+                }
+
+                .quantity-controls button {
+                    background: #f8f9fa;
+                    border: none;
+                    padding: 8px 12px;
+                    border-radius: 5px;
+                    color: #3498db;
+                    transition: all 0.3s;
+                }
+
+                .quantity-controls button:hover {
+                    background: #3498db;
+                    color: white;
+                }
+
+                .quantity {
+                    padding: 0 1rem;
+                    font-weight: bold;
+                }
+
+                .remove-cart {
+                    width: 100%;
+                    background: #e74c3c;
+                    color: white;
+                    border: none;
+                    padding: 8px;
+                    border-radius: 5px;
+                    transition: all 0.3s;
+                }
+
+                .remove-cart:hover {
+                    background: #c0392b;
+                }
+
+                .order-summary {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 2rem;
+                    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+                }
+
+                .summary-details {
+                    margin-top: 1.5rem;
+                }
+
+                .summary-item {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 1rem;
+                    color: #7f8c8d;
+                }
+
+                .summary-total {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 1rem;
+                    padding-top: 1rem;
+                    border-top: 2px solid #f8f9fa;
+                    font-weight: bold;
+                    font-size: 1.2rem;
+                    color: #2c3e50;
+                }
+
+                .checkout-btn {
+                    width: 100%;
+                    padding: 1rem;
+                    background: linear-gradient(145deg, #3498db, #2980b9);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    margin-top: 1.5rem;
+                    font-weight: bold;
+                    transition: all 0.3s;
+                }
+
+                .checkout-btn:hover {
+                    background: linear-gradient(145deg, #2980b9, #2472a4);
+                    transform: translateY(-2px);
+                }
+
+                .empty-cart {
+                    text-align: center;
+                    padding: 3rem;
+                }
+
+                .empty-cart i {
+                    font-size: 5rem;
+                    color: #bdc3c7;
+                    margin-bottom: 1rem;
+                }
+
+                .continue-shopping {
+                    display: inline-block;
+                    padding: 1rem 2rem;
+                    background: #3498db;
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 10px;
+                    margin-top: 1rem;
+                    transition: all 0.3s;
+                }
+
+                .continue-shopping:hover {
+                    background: #2980b9;
+                    transform: translateY(-2px);
+                }
+
+                @media (max-width: 768px) {
+                    .cart-item {
+                        padding: 1rem;
+                    }
+
+                    .product-details h4 {
+                        font-size: 1rem;
+                    }
+
+                    .quantity-controls {
+                        margin-top: 1rem;
+                    }
+                }
+            </style>
+            {% endblock css %}

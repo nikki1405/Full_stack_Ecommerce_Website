@@ -1,0 +1,217 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}Checkout{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row mt-5">
+        <div class="col-sm-8">
+            <h2 class="text-white mb-4">Shipping Address</h2>
+            {% for address in addresses %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ address.name }}</h5>
+                    <p class="card-text">{{ address.locality }}, {{ address.city }}</p>
+                    <p class="card-text">{{ address.state }} - {{ address.zipcode }}</p>
+                    <p class="card-text">Phone: {{ address.mobile }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card summary-card">
+                <div class="card-body">
+                    <h3 class="text-white mb-4">Order Summary</h3>
+                    {% for item in cart_items %}
+                    <div class="d-flex justify-content-between text-white mb-3">
+                        <span>{{ item.product.title }} × {{ item.quantity }}</span>
+                        <span>₹{{ item.total_price }}</span>
+                    </div>
+                    {% endfor %}
+                    <hr class="border-white">
+                    <div class="d-flex justify-content-between text-white">
+                        <span>Subtotal</span>
+                        <span>₹{{ amount }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between text-white">
+                        <span>Shipping</span>
+                        <span>₹{{ shipping_amount }}</span>
+                    </div>
+                    <hr class="border-white">
+                    <div class="d-flex justify-content-between text-white fw-bold">
+                        <span>Total</span>
+                        <span>₹{{ total_amount }}</span>
+                    </div>
+                    <button type="button" class="btn btn-light w-100 mt-4" id="rzp-button1">
+                        Proceed to Payment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Main container styling */
+    .container {
+        background: linear-gradient(135deg, #9145e1 0%, #2575fc 100%);
+        border-radius: 15px;
+        padding: 40px 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 100px;
+        margin-bottom: 50px;
+        max-width: 1200px;
+        width: 95%;
+    }
+
+    /* Row spacing */
+    .row.mt-5 {
+        margin-top: 1.5rem !important;
+    }
+
+    /* Address card styling */
+    .card {
+        background: white;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Summary card styling */
+    .summary-card {
+        background: linear-gradient(135deg, #0dac97 0%, #24e30b 100%);
+        position: sticky;
+        top: 100px;
+        margin-bottom: 20px;
+    }
+
+    .summary-card .card-body {
+        padding: 25px;
+    }
+
+    .summary-card .btn-light {
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 25px;
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .summary-card .btn-light:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: #ffffff;
+    }
+
+    /* Text styling */
+    .card-title {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .card-text {
+        color: #666;
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+
+    hr {
+        opacity: 0.2;
+        margin: 20px 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1200px) {
+        .container {
+            margin-top: 90px;
+            width: 90%;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .container {
+            margin-top: 85px;
+            padding: 30px 20px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin-top: 80px;
+            width: 95%;
+        }
+
+        .summary-card {
+            position: static;
+            margin-top: 30px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .container {
+            margin-top: 70px;
+            padding: 20px 15px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock content %}
+{% block payment %}
+<form id="payment-form">
+    {% csrf_token %}
+    <input type="hidden" name="order_id" value="{{ razorpay_order_id }}">
+    <input type="hidden" name="custid" value="{{ request.user.id }}">
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "{{ razorpay_merchant_key }}",
+        "amount": "{{ total_amount|multiply:100 }}",  // Convert to paise
+        "currency": "INR",
+        "name": "Neel Stores",
+        "description": "Order Payment",
+        "order_id": "{{ razorpay_order_id }}",
+        "callback_url": "{{ callback_url }}",
+        "prefill": {
+            "name": "{{ request.user.get_full_name }}",
+            "email": "{{ request.user.email }}",
+            "contact": ""
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        },
+        "modal": {
+            "ondismiss": function () {
+                console.log('Payment window closed');
+            }
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock payment %}

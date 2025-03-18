@@ -1,0 +1,164 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block title %}Orders{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <h1 class="text-center mb-5 text-white">My Orders</h1>
+        {% if orders %}
+        {% for order in orders %}
+        <div class="col-12 mb-4">
+            <div class="card order-card">
+                <div class="card-header bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Order #{{ order.order_id }}</h5>
+                        <span
+                            class="badge {% if order.status == 'Delivered' %}bg-success{% else %}bg-primary{% endif %}">
+                            {{ order.status }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div src="{{ order.product.Product_image.url }}" class="img-fluid rounded"
+                                alt="{{ order.product.title }}">
+                                </img>
+                                <div class="col-md-9">
+                                    <h5>{{ order.product.title }}</h5>
+                                    <p class="text-muted mb-2">Quantity: {{ order.quantity }}</p>
+                                    <p class="text-muted mb-2">Price: ₹{{ order.product.discounted_price }}</p>
+                                    <p class="text-muted mb-2">Total Amount: ₹{{ order.total_cost }}</p>
+                                    <p class="text-muted mb-0">Ordered on: {{ order.ordered_date }}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="delivery-address">
+                                    <h6 class="mb-2">Delivery Address:</h6>
+                                    <p class="mb-0">{{ order.address.name }}</p>
+                                    <p class="mb-0">{{ order.address.locality }}, {{ order.address.city }}</p>
+                                    <p class="mb-0">{{ order.address.state }} - {{ order.address.zipcode }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="empty-orders-container">
+                        <div class="empty-orders-box">
+                            <i class="fas fa-box-open mb-4" style="font-size: 4rem;"></i>
+                            <h2 class="mb-4">No Orders Yet</h2>
+                            <p class="mb-4">Looks like you haven't made any orders yet.</p>
+                            <a href="{% url 'home' %}" class="btn btn-light btn-lg">Start Shopping</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <style>
+                .container {
+                    background: linear-gradient(135deg, #9145e1 0%, #2575fc 100%);
+                    border-radius: 15px;
+                    padding: 40px 30px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    margin-top: 120px;
+                    margin-bottom: 50px;
+                }
+
+                .order-card {
+                    border: none;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s ease;
+                    margin-bottom: 20px;
+                }
+
+                .order-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                }
+
+                .card-header {
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                    border-radius: 10px 10px 0 0 !important;
+                }
+
+                .img-fluid {
+                    max-height: 150px;
+                    object-fit: contain;
+                    width: 100%;
+                }
+
+                .delivery-address {
+                    background-color: #f8f9fa;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin-top: 15px;
+                }
+
+                .empty-orders-container {
+                    min-height: 60vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                }
+
+                .empty-orders-box {
+                    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+                    padding: 3rem;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                    text-align: center;
+                    color: white;
+                    max-width: 500px;
+                    width: 90%;
+                }
+
+                .empty-orders-box .btn-light {
+                    font-weight: 600;
+                    padding: 0.8rem 2rem;
+                    border-radius: 8px;
+                    transition: all 0.3s ease;
+                }
+
+                .empty-orders-box .btn-light:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                .badge {
+                    padding: 8px 12px;
+                    font-size: 0.9rem;
+                }
+
+                @media (max-width: 768px) {
+                    .container {
+                        margin-top: 100px;
+                        padding: 20px 15px;
+                    }
+
+                    .card-body {
+                        padding: 15px;
+                    }
+                }
+
+                @media (max-width: 576px) {
+                    .container {
+                        margin-top: 80px;
+                        padding: 15px;
+                    }
+
+                    .empty-orders-box {
+                        padding: 2rem;
+                    }
+
+                    h1 {
+                        font-size: 1.8rem;
+                    }
+                }
+            </style>
+            {% endblock content %}

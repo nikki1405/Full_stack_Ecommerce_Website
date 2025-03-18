@@ -1,0 +1,48 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Product Detail{% endblock title %}
+{% block content %}
+<div class="container my-5 pt-5">
+    <div class="row d-flex align-items-center justify-content-between">
+        <div class="img2 col-lg-5">
+            <img src="{{ product.Product_image.url }}" alt="product"
+                class="image col-xs-6 col-sm-12 col-lg-12 text-sm-center w-100 h-auto" />
+        </div>
+        <div class="product-detail col-lg-6 mt-5 mb-5">
+            <h1 style="font-family: Georgia, 'Times New Roman', Times, serif">
+                {{ product.title }}
+            </h1>
+            <h5 style="font-family: Georgia, 'Times New Roman', Times, serif">Rs. {{ product.discounted_price }}/-</h5>
+            <small class="text-decoration-line-through text-muted fs-5">
+                <del>Rs.{{ product.selling_price }}/-</del>
+            </small>
+            <div>
+                <h4 class="mt-5" style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold;">
+                    About the Product
+                </h4>
+                <ul class="fs-5" style="font-family: Rajdhani;">
+                    <li>{{ product.description }}</li>
+                </ul>
+                <h4 class="mt-5" style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold;">
+                    Contents
+                </h4>
+                <ul class="fs-5" style="font-family: Rajdhani;">
+                    <li>{{ product.composition }}</li>
+                </ul>
+                <h4 class="mt-5" style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold;">
+                    Usage
+                </h4>
+                <ul class="fs-5" style="font-family: Rajdhani;">
+                    <li>{{ product.proadapp }}</li>
+                </ul>
+                <form action="{% url 'add-to-cart' %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="prod_id" value="{{ product.id }}" />
+                    <button type="submit" class="btn btn-light shadow px-5 py-2">Add to cart</button>
+                </form>
+                <a href="{% url 'cart' %}" class="btn btn-warning shadow px-5 py-2 ms-4">Buy Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
